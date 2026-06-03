@@ -20,10 +20,10 @@ schema = StructType([
 
 print("Menunggu aliran data masuk...")
 
-# 3. Read Stream: Pantau folder "streaming_data" di dalam container (/app)
+# 3. Read Stream: Pantau folder "streaming_data"
 df_stream = spark.readStream \
     .schema(schema) \
-    .json("/app/streaming_data")
+    .json("./streaming_data")
 
 # 4. Transformasi Data: Hitung frekuensi kata
 # Pecah paragraf menjadi kata-kata (tokenization)
