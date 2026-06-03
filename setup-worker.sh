@@ -31,12 +31,7 @@ echo "🚀 [2/3] Menghubungkan Worker ke Spark Master di IP: $MASTER_IP..."
 
 podman rm -f spark-worker 2>/dev/null
 
-podman run -d \
-  --name spark-worker \
-  -e SPARK_MODE=worker \
-  -e SPARK_MASTER_URL=spark://$MASTER_IP:7077 \
-  -p 8081:8081 \
-  docker.io/bitnamilegacy/spark:3.5.1
+podman run -d --name spark-worker -e SPARK_MODE=worker -e SPARK_MASTER_URL=spark://$MASTER_IP:7077 -p 8081:8081 docker.io/bitnamilegacy/spark:3.5.1
 
 echo "✅ [3/3] Spark Worker berhasil dijalankan dan terhubung!"
 echo "🔍 Buka UI Worker di browser: http://localhost:8081"
