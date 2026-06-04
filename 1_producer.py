@@ -8,8 +8,6 @@ STREAM_DIR = "./streaming_data"
 os.makedirs(STREAM_DIR, exist_ok=True)
 
 print("Memuat dataset dari Hugging Face...")
-# Catatan: Untuk tugas 50GB, ganti "20231101.ace" ke "20231101.en" dsb.
-# Saat ini kita gunakan dataset kecil (Acehnese) untuk uji coba kode
 ds = load_dataset("wikimedia/wikipedia", "20231101.ace", split="train")
 
 print(f"Mulai mengirim aliran data ke direktori: {STREAM_DIR}...")

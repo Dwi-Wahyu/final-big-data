@@ -2,41 +2,29 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import explode, split, col, length
 from pyspark.sql.types import StructType, StructField, StringType
 
-# 1. Inisiasi Spark Session
+# Inisiasi Spark Session
 spark = SparkSession.builder \
     .appName("WikiStreamingAnalytics") \
+    .config("spark.driver.host", "192.168.18.136") \
+    .config("spark.driver.bindAddress", "0.0.0.0") \
     .getOrCreate()
 
-# Mengurangi log informasi yang terlalu berisik di terminal
 spark.sparkContext.setLogLevel("WARN")
 
-# 2. Definisikan Skema Data (Sesuai dengan format JSON dari Producer)
 schema = StructType([
     StructField("id", StringType(), True),
-    StructField("url", StringType(), True),
     StructField("title", StringType(), True),
     StructField("text", StringType(), True)
 ])
 
-print("Menunggu aliran data masuk...")
+# Kembali menggunakan path /app/ karena akan dieksekusi di dalam container
+df_stream = spark.readStream.schema(schema).json("/app/streaming_data")
 
-# 3. Read Stream: Pantau folder "streaming_data"
-df_stream = spark.readStream \
-    .schema(schema) \
-    .json("./streaming_data")
+# Transformasi Data
+words = df_stream.select(explode(split(col("text"), "\\s+")).alias("word"))
+word_counts = words.filter(length(col("word")) > 4).groupBy("word").count()
 
-# 4. Transformasi Data: Hitung frekuensi kata
-# Pecah paragraf menjadi kata-kata (tokenization)
-words = df_stream.select(
-    explode(split(col("text"), "\\s+")).alias("word")
-)
-
-# Filter kata yang terlalu pendek (misal: "di", "ke") dan hitung frekuensinya
-word_counts = words.filter(length(col("word")) > 3) \
-    .groupBy("word") \
-    .count()
-
-# 5. Write Stream: Tampilkan hasil agregasi ke console secara real-time
+# Tampilkan hasil
 query = word_counts.writeStream \
     .outputMode("complete") \
     .format("console") \
