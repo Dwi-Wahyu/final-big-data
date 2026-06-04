@@ -5,7 +5,7 @@ from pyspark.sql.types import StructType, StructField, StringType
 # Inisiasi Spark Session
 spark = SparkSession.builder \
     .appName("WikiStreamingAnalytics") \
-    .config("spark.driver.host", "192.168.18.136") \
+    .config("spark.driver.host", "192.168.1.140") \
     .config("spark.driver.bindAddress", "0.0.0.0") \
     .getOrCreate()
 
