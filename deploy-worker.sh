@@ -21,6 +21,5 @@ podman run -d \
   -e SPARK_MODE=worker \
   -e SPARK_MASTER_URL=spark://$MASTER_IP:7077 \
   -e SPARK_WORKER_HOST=$WORKER_IP \
-  -e SPARK_LOCAL_IP=0.0.0.0 \
   -e SPARK_WORKER_PORT=7078 \
   docker.io/bitnamilegacy/spark:3.5.1
