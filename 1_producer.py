@@ -1,29 +1,48 @@
 import time
 import json
-import os
+import subprocess
 from datasets import load_dataset
-STREAM_DIR = "/home/dwiwahyuilahi/Kuliah/Big Data/FINAL/source-code/streaming_data"
-os.makedirs(STREAM_DIR, exist_ok=True)
+
+HDFS_DIR = "/streaming_data"
+
+print("Membuat direktori di HDFS (jika belum ada)...")
+# Perintah ini setara dengan masuk ke container dan membuat folder
+subprocess.run(["podman", "exec", "-i", "namenode", "hdfs", "dfs", "-mkdir", "-p", HDFS_DIR])
+
 print("Memuat dataset RAKSASA dari Hugging Face (Wikipedia EN - 70GB)...")
 ds = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True)
-print(f"Memulai pemboman data BATCH ke direktori: {STREAM_DIR}...")
+
+print(f"Memulai unduh dan DISTRIBUSI data BATCH langsung ke HDFS: {HDFS_DIR}...")
 BATCH_SIZE = 1000 
 batch_data = []
 file_index = 0
 total_articles = 0
 start_time = time.time()
+
 for row in ds:
     json_str = json.dumps({"id": row["id"], "url": row["url"], "title": row["title"], "text": row["text"]})
     batch_data.append(json_str)
     total_articles += 1
+
     if len(batch_data) >= BATCH_SIZE:
-        final_file_path = os.path.join(STREAM_DIR, f"batch_{file_index}.json")
-        temp_file_path = os.path.join(STREAM_DIR, f".temp_batch_{file_index}.json")
-        with open(temp_file_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(batch_data) + "\n")
-        os.rename(temp_file_path, final_file_path)
-        elapsed = time.time() - start_time
-        rate = total_articles / elapsed
-        print(f"[+] Ditembakkan: Batch {file_index} ({BATCH_SIZE} Artikel) | Kecepatan: {rate:.0f} artikel/detik | Total: {total_articles}")
+        hdfs_file_path = f"{HDFS_DIR}/batch_{file_index}.json"
+        
+        # Gabungkan data batch menjadi satu string panjang di RAM
+        data_string = "\n".join(batch_data) + "\n"
+
+        # Trik Utama: Menembakkan data dari memori RAM langsung ke HDFS NameNode
+        # Tanda '-' memberitahu HDFS untuk menerima data dari stdin Python
+        command = ["podman", "exec", "-i", "namenode", "hdfs", "dfs", "-put", "-", hdfs_file_path]
+        
+        process = subprocess.Popen(command, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        _, stderr_output = process.communicate(input=data_string.encode('utf-8'))
+
+        if process.returncode != 0:
+            print(f"❌ Error menyimpan batch {file_index} ke HDFS: {stderr_output.decode('utf-8')}")
+        else:
+            elapsed = time.time() - start_time
+            rate = total_articles / elapsed
+            print(f"[+] Terdistribusi ke Worker: Batch {file_index} ({BATCH_SIZE} Artikel) | Kecepatan: {rate:.0f} art/detik | Total: {total_articles}")
+
         batch_data = []
         file_index += 1

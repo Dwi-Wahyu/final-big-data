@@ -27,12 +27,21 @@ podman rm -f spark-master 2>/dev/null
 CURRENT_DIR=$(pwd)
 
 # Menjalankan Spark Master
+# podman run -d \
+#   --name spark-master \
+#   -e SPARK_MODE=master \
+#   -v "$(pwd):/app" \
+#   -p 8080:8080 \
+#   -p 7077:7077 \
+#   docker.io/bitnamilegacy/spark:3.5.1
+
 podman run -d \
   --name spark-master \
+  --network host \
   -e SPARK_MODE=master \
+  -e SPARK_LOCAL_IP=192.168.1.93 \
+  -e SPARK_MASTER_HOST=192.168.1.93 \
   -v "$(pwd):/app" \
-  -p 8080:8080 \
-  -p 7077:7077 \
   docker.io/bitnamilegacy/spark:3.5.1
 
 echo "✅ [3/3] Spark Master berhasil dijalankan!"
