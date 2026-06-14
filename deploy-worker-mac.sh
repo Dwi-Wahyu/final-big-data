@@ -17,16 +17,15 @@ podman rm -f datanode spark-worker
 
 podman run -d \
   --name spark-worker \
-  --network spark-net \
-  --ip $WORKER_IP \
   -p 7078:7078 \
   -p 8081:8081 \
   -e SPARK_MODE=worker \
   -e SPARK_MASTER_URL=spark://$MASTER_IP:7077 \
   -e SPARK_WORKER_HOST=$WORKER_IP \
   -e SPARK_WORKER_PORT=7078 \
+  -e SPARK_DAEMON_JAVA_OPTS="-Dspark.worker.host=$WORKER_IP -Dspark.local.ip=$WORKER_IP" \
   docker.io/bitnamilegacy/spark:3.5.1
-
+  
 podman run -d \
   --name datanode \
   -p 9864:9864 \
