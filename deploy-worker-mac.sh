@@ -14,15 +14,13 @@ podman run -d \
   -e HDFS_CONF_dfs_datanode_hostname=$WORKER_IP \
   bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
 
-
 podman run -d \
   --name spark-worker \
   -p 7078:7078 \
   -p 8081:8081 \
-  --add-host myhost:$WORKER_IP \
   -e SPARK_MODE=worker \
   -e SPARK_MASTER_URL=spark://$MASTER_IP:7077 \
   -e SPARK_WORKER_HOST=$WORKER_IP \
   -e SPARK_WORKER_PORT=7078 \
-  --platform linux/amd64 \
+  -e SPARK_DAEMON_JAVA_OPTS="-Dspark.worker.host=$WORKER_IP" \
   docker.io/bitnamilegacy/spark:3.5.1
