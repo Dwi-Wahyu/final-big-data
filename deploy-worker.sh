@@ -1,6 +1,8 @@
 MASTER_IP=192.168.1.93
 WORKER_IP=$(ipconfig getifaddr en0)
 
+podman rm -f datanode spark-worker
+
 podman run -d \
   --name datanode \
   -p 9864:9864 \
