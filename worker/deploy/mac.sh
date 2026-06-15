@@ -1,6 +1,6 @@
 # Jalankan worker dengan network tersebut
-MASTER_IP=192.168.1.93
-WORKER_IP=192.168.1.212
+MASTER_IP=${MASTER_IP:-192.168.1.93}
+WORKER_IP=${WORKER_IP:-192.168.1.212}
 
 podman rm -f datanode spark-worker
 

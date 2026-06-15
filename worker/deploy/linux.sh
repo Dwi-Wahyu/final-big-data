@@ -1,5 +1,5 @@
-MASTER_IP=192.168.1.93
-WORKER_IP=$(ipconfig getifaddr en0)
+MASTER_IP=${MASTER_IP:-192.168.1.28}
+WORKER_IP=${WORKER_IP:-192.168.1.23}
 
 podman rm -f datanode spark-worker
 

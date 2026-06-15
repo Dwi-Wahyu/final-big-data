@@ -1,1 +1,0 @@
-podman exec -it spark-master spark-submit --master spark://192.168.1.25:7077 --conf spark.driver.host=192.168.1.25 --conf spark.driver.bindAddress=0.0.0.0 /app/2_spark_streaming.py
