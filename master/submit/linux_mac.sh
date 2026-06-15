@@ -1,4 +1,4 @@
-MASTER_IP=192.168.1.25
+MASTER_IP=${1:-192.168.1.28}
 
 podman exec -it spark-master spark-submit \
   --master spark://$MASTER_IP:7077 \
