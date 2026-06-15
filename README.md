@@ -32,3 +32,5 @@ Evaluasi
 
 untuk run word count
 bash master/submit/linux_mac.sh [IP_MASTER_SAAT_INI]
+
+bash master/submit/linux_mac_small.sh [IP_MASTER_SAAT_INI]
