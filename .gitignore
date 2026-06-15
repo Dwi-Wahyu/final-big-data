@@ -9,6 +9,9 @@ datasets/*
 !datasets/.gitkeep
 streaming_data/*
 !streaming_data/.gitkeep
+streaming_data_small/*
+!streaming_data_small/.gitkeep
+!streaming_data_small/1_producer_small.py
 
 # Python Cache & Compiled files
 __pycache__/

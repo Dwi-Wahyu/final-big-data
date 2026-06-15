@@ -1,4 +1,4 @@
-MASTER_IP=192.168.1.93
+MASTER_IP=192.168.1.28
 
 podman rm -f spark-master namenode
 

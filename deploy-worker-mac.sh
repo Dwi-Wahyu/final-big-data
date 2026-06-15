@@ -1,14 +1,3 @@
-# Buat network baru dengan subnet yang sama dengan WiFi
-podman network create \
-  --driver bridge \
-  --subnet 192.168.1.0/24 \
-  --gateway 192.168.1.1 \
-  spark-net
-
-podman machine stop
-podman machine rm
-podman machine init --vmtype qemu --now
-
 # Jalankan worker dengan network tersebut
 MASTER_IP=192.168.1.93
 WORKER_IP=192.168.1.212
