@@ -25,3 +25,10 @@ Di Linux / Mac OS (Tetap sama):
 2 bash run.sh worker 192.168.1.28 192.168.1.23 linux
 
 Struktur folder tetap rapi dan sekarang sudah sepenuhnya kompatibel dengan terminal masing-masing OS.
+
+---
+
+Evaluasi
+
+untuk run word count
+bash master/submit/linux_mac.sh [IP_MASTER_SAAT_INI]
