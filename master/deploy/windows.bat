@@ -7,6 +7,7 @@ podman run -d ^
   --name namenode ^
   --network host ^
   -v "%cd%/hadoop/namenode:/hadoop/dfs/name" ^
+  -v "%cd%/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml:ro" ^
   -e CLUSTER_NAME=BigDataCluster ^
   -e CORE_CONF_fs_defaultFS=hdfs://%MASTER_IP%:9000 ^
   -e HDFS_CONF_dfs_namenode_rpc_bind_host=0.0.0.0 ^

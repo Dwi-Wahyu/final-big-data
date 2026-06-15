@@ -6,11 +6,13 @@ podman run -d \
   --name namenode \
   --network host \
   -v "$(pwd)/hadoop/namenode:/hadoop/dfs/name" \
+  -v "$(pwd)/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml" \
   -e CLUSTER_NAME=BigDataCluster \
   -e CORE_CONF_fs_defaultFS=hdfs://$MASTER_IP:9000 \
   -e HDFS_CONF_dfs_namenode_rpc_bind_host=0.0.0.0 \
   -e HDFS_CONF_dfs_namenode_http_address=0.0.0.0:9870 \
   -e HDFS_CONF_dfs_namenode_datanode_registration_ip__hostname__check=false \
+  -e HDFS_CONF_dfs_namenode_datanode_registration_ip_hostname_check=false \
   -e HDFS_CONF_dfs_client_use_datanode_hostname=false \
   -e HDFS_CONF_dfs_datanode_use_datanode_hostname=false \
   bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8

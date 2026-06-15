@@ -10,9 +10,10 @@ podman run -d ^
   -p 9866:9866 ^
   -p 9867:9867 ^
   -v "%cd%/hadoop/datanode:/hadoop/dfs/data" ^
-  -v "%cd%/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml:ro" ^
   -e CORE_CONF_fs_defaultFS=hdfs://%MASTER_IP%:9000 ^
   -e HDFS_CONF_dfs_datanode_hostname=%WORKER_IP% ^
+  -e HDFS_CONF_dfs_datanode_use_datanode_hostname=false ^
+  -e HDFS_CONF_dfs_client_use_datanode_hostname=false ^
   bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
 
 podman run -d ^
