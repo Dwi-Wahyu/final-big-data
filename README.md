@@ -34,3 +34,36 @@ untuk run word count
 bash master/submit/linux_mac.sh [IP_MASTER_SAAT_INI]
 
 bash master/submit/linux_mac_small.sh [IP_MASTER_SAAT_INI]
+
+---
+
+### Menjalankan Insight Baru (Tugas Tambahan)
+
+Gunakan script `submit_new_insights` untuk menjalankan analisis tambahan:
+
+**Linux / Mac:**
+```bash
+# Analisis Bi-gram
+bash master/submit/submit_new_insights.sh 3_spark_insight_bigram.py [IP_MASTER]
+
+# Analisis Regex Tahun
+bash master/submit/submit_new_insights.sh 4_spark_insight_regex.py [IP_MASTER]
+
+# Streaming Socket (Jalankan producer dulu di terminal terpisah)
+python3 5_producer_socket.py
+bash master/submit/submit_new_insights.sh 5_spark_socket.py [IP_MASTER]
+```
+
+**Windows:**
+```powershell
+# Analisis Bi-gram
+master\submit\windows_new_insights.bat 3_spark_insight_bigram.py [IP_MASTER]
+
+# Analisis Regex Tahun
+master\submit\windows_new_insights.bat 4_spark_insight_regex.py [IP_MASTER]
+
+# Streaming Socket (Jalankan producer dulu di terminal terpisah)
+python 5_producer_socket.py
+master\submit\windows_new_insights.bat 5_spark_socket.py [IP_MASTER]
+```
+
