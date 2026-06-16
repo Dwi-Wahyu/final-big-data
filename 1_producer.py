@@ -5,14 +5,12 @@ from datasets import load_dataset
 
 HDFS_DIR = "/streaming_data"
 
-HF_TOKEN="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"
-
 print("Membuat direktori di HDFS (jika belum ada)...")
 # Perintah ini setara dengan masuk ke container dan membuat folder
 subprocess.run(["podman", "exec", "-i", "namenode", "hdfs", "dfs", "-mkdir", "-p", HDFS_DIR])
 
 print("Memuat dataset RAKSASA dari Hugging Face (Wikipedia EN - 70GB)...")
-ds = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True, token=HF_TOKEN)
+ds = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True)
 
 print(f"Memulai unduh dan DISTRIBUSI data BATCH langsung ke HDFS: {HDFS_DIR}...")
 BATCH_SIZE = 1000 
